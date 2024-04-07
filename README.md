@@ -1,4 +1,5 @@
-# 0x02. AirBnB clone - MySQL
+# 0x03. AirBnB clone - MySQL - Deploy static
+![aribnb_diagram_0](https://github.com/3zzazakl/wehackmind/assets/140283548/d38c563d-335e-466d-8935-e8466d4ccd77)
 ![hbnb_step2](https://github.com/3zzazakl/alx-higher_level_programming/assets/140283548/4440a9c9-22a2-4910-a4eb-d71aedf51c9d)
 
 ## Tasks

@@ -14,12 +14,15 @@ echo "<html>
     Holberton School
   </body>" | sudo tee /data/web_static/releases/test/index.html
 
-sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
+sudo ln -sf /data/web_static/releases/test /data/web_static/current
 sudo chown -R ubuntu:ubuntu /data/
 
 # setting Nginx congs files
 config_file="/etc/nginx/sites-available/default"
-sudo sed -i '/server_name _;/a\\n\tlocation /hbnb_static/ {\n\talias /data/web_static/current/;\n\t}\n' $config_file
+
+if ! grep -q "hbnb_static" $config_file; then
+  sudo sed -i '/server_name _;/a\\n\tlocation /hbnb_static/ {\n\talias /data/web_static/current/;\n\t}\n' "$config_file"
+fi
 
 sudo service nginx restart
 

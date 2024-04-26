@@ -29,7 +29,7 @@ def do_deploy(archive_path):
 
         # delete archive
         run('rm /tmp/{}'.format(name))
-        run('mv {}web_static/* {}'.format(path, path))
+        run('mv {}web_static/* {}'.format(path, path.split('/', 1)[0]))
 
         # delete symbolic link
         run('rm -rf {}web_static'.format(path))

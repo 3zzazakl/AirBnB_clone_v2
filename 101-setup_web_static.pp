@@ -79,6 +79,45 @@ package { 'nginx':
     mode    => '0644'
 }
 
+file { '/data':
+    ensure    => directory,
+    owner     => 'ubuntu',
+    group     => 'ubuntu',
+    mode      => '0755',
+    recursive => true
+}
+
+file { '/data/web_static':
+    ensure    => directory,
+    owner     => 'ubuntu',
+    group     => 'ubuntu',
+    mode      => '0755',
+    recursive => true
+}
+
+file { '/data/web_static/releases':
+    ensure    => directory,
+    owner     => 'ubuntu',
+    group     => 'ubuntu',
+    mode      => '0755',
+    recursive => true
+}
+
+file { '/data/web_static/releases/test/index.html':
+    ensure  => file,
+    content => "Holberton School\n",
+    owner   => 'ubuntu',
+    group   => 'ubuntu',
+    mode    => '0644'
+}
+
+file { '/data/web_static/current':
+    ensure => link,
+    target => '/data/web_static/releases/test',
+    owner  => 'ubuntu',
+    group  => 'ubuntu',
+}
+
 -> file { '/var/www/html/404.html':
     ensure  => 'present',
     content => "Ceci n'est pas la page\n"

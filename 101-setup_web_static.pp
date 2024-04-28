@@ -56,8 +56,11 @@ package { 'nginx':
     target => '/data/web_static/releases/test'
 }
 
--> exec { 'chown -R ubuntu:ubuntu /data':
-    path => '/usr/bin/:/usr/local/bin:/bin/'
+-> exec { 'chown_data':
+    path => '/usr/bin/:/usr/local/bin:/bin/',
+    command => 'chown -R ubuntu:ubuntu /data',
+    logoutput => true,
+    refreshonly => true
 }
 
 -> file { '/var/www':

@@ -84,5 +84,5 @@ package { 'nginx':
 }
 
 -> exec { 'nginx_restart':
-    command => 'service nginx restart'
+    command => '/usr/sbin/service nginx restart'
 }

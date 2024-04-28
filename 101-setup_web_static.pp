@@ -72,8 +72,11 @@ package { 'nginx':
 }
 
 -> file { '/var/www/html/index.html':
-    ensure  => 'present',
-    content => "Holberton School\n"
+    ensure  => file,
+    content => "Holberton School\n",
+    owner   => 'ubuntu',
+    group   => 'ubuntu',
+    mode    => '0644'
 }
 
 -> file { '/var/www/html/404.html':

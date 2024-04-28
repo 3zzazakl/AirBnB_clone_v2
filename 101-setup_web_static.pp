@@ -29,7 +29,7 @@ package { 'nginx':
     ensure => 'directory'
 }
 
--> file { '/data/web_static/':
+-> file { '/data/web_static':
     ensure => 'directory'
 }
 
@@ -50,13 +50,14 @@ package { 'nginx':
     ensure => 'directory'
 }
 
+
 -> file { '/data/web_static/current':
     ensure => 'link',
     target => '/data/web_static/releases/test'
 }
 
--> exec { 'chown_data':
-    command => 'chown -R ubuntu:ubuntu /data'
+-> exec { 'chown -R ubuntu:ubuntu /data':
+    path => '/usr/bin/:/usr/local/bin:/bin/'
 }
 
 -> file { '/var/www':
@@ -68,20 +69,20 @@ package { 'nginx':
 }
 
 -> file { '/var/www/html/index.html':
-    ensure  => 'file',
+    ensure  => 'present',
     content => "Holberton School\n"
 }
 
 -> file { '/var/www/html/404.html':
-    ensure  => 'file',
+    ensure  => 'present',
     content => "Ceci n'est pas la page\n"
 }
 
 -> file { '/etc/nginx/sites-available/default':
-    ensure  => 'file',
+    ensure  => 'present',
     content => $nginx_config
 }
 
--> service { 'nginx':
-    ensure => 'running'
+-> exec { 'nginx_restart':
+    command => 'service nginx restart'
 }

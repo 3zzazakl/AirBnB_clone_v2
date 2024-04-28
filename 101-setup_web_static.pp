@@ -57,9 +57,9 @@ package { 'nginx':
 }
 
 -> exec { 'chown_data':
-    path => '/usr/bin/:/usr/local/bin:/bin/',
-    command => 'chown -R ubuntu:ubuntu /data',
-    logoutput => true,
+    path        => '/usr/bin/:/usr/local/bin:/bin/',
+    command     => 'chown -R ubuntu:ubuntu /data',
+    logoutput   => true,
     refreshonly => true
 }
 

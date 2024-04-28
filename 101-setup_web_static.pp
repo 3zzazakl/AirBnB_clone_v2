@@ -79,7 +79,7 @@ package { 'nginx':
     mode    => '0644'
 }
 
-file { '/data':
+-> file { '/data':
     ensure    => directory,
     owner     => 'ubuntu',
     group     => 'ubuntu',
@@ -87,7 +87,7 @@ file { '/data':
     recursive => true
 }
 
-file { '/data/web_static':
+-> file { '/data/web_static':
     ensure    => directory,
     owner     => 'ubuntu',
     group     => 'ubuntu',
@@ -95,7 +95,7 @@ file { '/data/web_static':
     recursive => true
 }
 
-file { '/data/web_static/releases':
+-> file { '/data/web_static/releases':
     ensure    => directory,
     owner     => 'ubuntu',
     group     => 'ubuntu',
@@ -103,7 +103,7 @@ file { '/data/web_static/releases':
     recursive => true
 }
 
-file { '/data/web_static/releases/test/index.html':
+-> file { '/data/web_static/releases/test/index.html':
     ensure  => file,
     content => "Holberton School\n",
     owner   => 'ubuntu',
@@ -111,7 +111,7 @@ file { '/data/web_static/releases/test/index.html':
     mode    => '0644'
 }
 
-file { '/data/web_static/current':
+-> file { '/data/web_static/current':
     ensure => link,
     target => '/data/web_static/releases/test',
     owner  => 'ubuntu',

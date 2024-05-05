@@ -1,25 +1,5 @@
 # configure web static
 
-$nginx_config = "server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    add_header 'X-Served-By' ${hostname};
-    root /var/www/html;
-    index index.html index.htm;
-    location /hbnb_static {
-        alias /data/web_static/current;
-        index index.html index.htm;
-    }
-    location /redirect_me {
-        return 301 https://www.youtube.com;
-    }
-    error_page 404 /404.html;
-    location /404 {
-        root /var/www/html;
-        internal;
-    }
-}"
-
 package { 'nginx':
     ensure   => 'installed',
     provider => apt
@@ -37,13 +17,26 @@ package { 'nginx':
     ensure => 'directory'
 }
 
+-> file { '/data/web_static/current':
+    ensure => 'link',
+    target => '/data/web_static/releases/test'
+}
+
 -> file { '/data/web_static/releases/test':
     ensure => 'directory'
 }
 
+
 -> file { '/data/web_static/releases/test/index.html':
-    ensure  => 'file',
-    content => "Holberton School\n"
+    ensure  => 'present',
+    content => "<!DOCTYPE html>
+        <html>
+            <head> 
+            </head>
+            <body>
+                <p>Nginx server test</p>
+            </body>
+        </html>"
 }
 
 -> file { '/data/web_static/shared':
@@ -51,13 +44,8 @@ package { 'nginx':
 }
 
 
--> file { '/data/web_static/current':
-    ensure => 'link',
-    target => '/data/web_static/releases/test'
-}
-
 -> exec { 'chown_data':
-    path        => '/usr/bin/:/usr/local/bin:/bin/',
+    path        => ['/usr/bin/', '/usr/local/bin', '/bin/'],
     command     => 'chown -R ubuntu:ubuntu /data',
     logoutput   => true,
     refreshonly => true
@@ -72,62 +60,27 @@ package { 'nginx':
 }
 
 -> file { '/var/www/html/index.html':
-    ensure  => file,
-    content => "Holberton School\n",
+    ensure  => 'present',
+    content => "<!DOCTYPE html>
+        <html>
+            <head> 
+            </head>
+            <body>
+                <p>Nginx server test</p>
+            </body>
+        </html>",
     owner   => 'ubuntu',
     group   => 'ubuntu',
     mode    => '0644'
 }
 
--> file { '/data':
-    ensure    => directory,
-    owner     => 'ubuntu',
-    group     => 'ubuntu',
-    mode      => '0755',
-    recursive => true
+exec { 'nginx_config':
+    environment =>   ['data=\ \tlocation /hbnb_static {\n\t\talias /data/web_static/current;\n\t}\n'],
+    command     => 'sed -i "39i $data" /etc/nginx/sites-enabled/default',
+    path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin'
 }
 
--> file { '/data/web_static':
-    ensure    => directory,
-    owner     => 'ubuntu',
-    group     => 'ubuntu',
-    mode      => '0755',
-    recursive => true
-}
-
--> file { '/data/web_static/releases':
-    ensure    => directory,
-    owner     => 'ubuntu',
-    group     => 'ubuntu',
-    mode      => '0755',
-    recursive => true
-}
-
--> file { '/data/web_static/releases/test/index.html':
-    ensure  => file,
-    content => "Holberton School\n",
-    owner   => 'ubuntu',
-    group   => 'ubuntu',
-    mode    => '0644'
-}
-
--> file { '/data/web_static/current':
-    ensure => link,
-    target => '/data/web_static/releases/test',
-    owner  => 'ubuntu',
-    group  => 'ubuntu',
-}
-
--> file { '/var/www/html/404.html':
-    ensure  => 'present',
-    content => "Ceci n'est pas la page\n"
-}
-
--> file { '/etc/nginx/sites-available/default':
-    ensure  => 'present',
-    content => $nginx_config
-}
-
--> exec { 'nginx_restart':
-    command => '/usr/sbin/service nginx restart'
+service { 'nginx':
+    ensure    => running,
+    subscribe => Exec['nginx_config'],
 }

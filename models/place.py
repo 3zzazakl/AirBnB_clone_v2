@@ -21,6 +21,9 @@ place_amenity = Table(
 class Place(BaseModel, Base):
     """ A place to stay """
     __tablename__ = "places"
+    __table_args__ = {
+        ('mysql_charset', 'latin1'),
+    }
     if storage_type == "db":
         city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
         user_id = Column(String(60), ForeignKey("users.id"), nullable=False)

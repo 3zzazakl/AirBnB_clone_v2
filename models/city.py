@@ -14,6 +14,9 @@ class City(BaseModel, Base):
     """ The city class, contains state ID and name """
 
     __tablename__ = "cities"
+    __table_args__ = {
+        ('mysql_charset', 'latin1'),
+    }
     if storage_type == "db":
         id = Column(String(60), primary_key=True)
         name = Column(String(128), nullable=False)

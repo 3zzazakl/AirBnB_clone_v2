@@ -15,7 +15,7 @@ class City(BaseModel, Base):
 
     __tablename__ = "cities"
     __table_args__ = {
-        ('mysql_charset', 'latin1'),
+        ('mysql_default_charset', 'latin1'),
     }
     if storage_type == "db":
         id = Column(String(60), primary_key=True)
